@@ -1,0 +1,172 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#f8fafc;
+}
+
+.auth-container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* LEFT SIDE */
+
+.auth-left{
+    flex:1;
+    background:
+    radial-gradient(circle at top right,#60a5fa,transparent 40%),
+    radial-gradient(circle at bottom left,#2563eb,transparent 40%),
+    #1e3a8a;
+
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:60px;
+}
+
+.content{
+    max-width:500px;
+}
+
+.content h1{
+    font-size:4rem;
+    margin-bottom:20px;
+}
+
+.content h2{
+    font-size:2.5rem;
+    margin-bottom:20px;
+}
+
+.content p{
+    font-size:1.1rem;
+    line-height:1.8;
+    opacity:.95;
+}
+
+/* RIGHT SIDE */
+
+.auth-right{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+}
+
+.form-card{
+    width:100%;
+    max-width:500px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
+
+.form-card h2{
+    color:#1e293b;
+    margin-bottom:10px;
+}
+
+.form-card p{
+    color:#64748b;
+    margin-bottom:25px;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#334155;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    outline:none;
+    transition:.3s;
+    font-size:15px;
+}
+
+.input-group input:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 4px rgba(37,99,235,.1);
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+    margin-top:10px;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+.bottom-link{
+    text-align:center;
+    margin-top:25px;
+    color:#64748b;
+}
+
+.bottom-link a{
+    color:#2563eb;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.flash-wrapper{
+    margin-bottom:15px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .auth-container{
+        flex-direction:column;
+    }
+
+    .auth-left{
+        min-height:250px;
+        padding:40px 20px;
+        text-align:center;
+    }
+
+    .content h1{
+        font-size:3rem;
+    }
+
+    .content h2{
+        font-size:2rem;
+    }
+
+    .auth-right{
+        padding:20px;
+    }
+
+    .form-card{
+        padding:30px 25px;
+    }
+}

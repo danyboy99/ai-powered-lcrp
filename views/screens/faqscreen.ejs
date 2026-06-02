@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>FAQ Management | Omni AI</title>
+
+    <link rel="stylesheet" href="/stylesheets/faq-management.css">
+
+    <!-- FONT AWESOME -->
+    <link 
+        rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <%- include('../components/header') %>
+
+    </div>
+
+    <!-- FLASH MESSAGE -->
+    <div class="flash-wrapper">
+
+        <%- include('../components/flashmessage') %>
+
+    </div>
+
+    <!-- MAIN -->
+    <main class="faq-container">
+
+        <!-- CREATE FAQ -->
+        <div class="createFAQ">
+
+            <div class="section-top">
+
+                <span class="badge">
+                    AI Training
+                </span>
+
+                <h1>
+                    FAQ Management
+                </h1>
+
+                <p>
+                    Create FAQs for your Omni AI assistant.
+                    These FAQs will help your AI respond
+                    accurately to your customers.
+                </p>
+
+            </div>
+
+            <!-- CREATE FORM -->
+            <form 
+                action="https://ai-receptionist-nj3f.onrender.com/FAQ/create" 
+                method="post"
+            >
+
+                <input 
+                    type="text"
+                    placeholder="Enter Question"
+                    name="question"
+                    required
+                >
+
+                <textarea 
+                    placeholder="Enter Answer"
+                    name="answer"
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    Create FAQ
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- FAQ LIST -->
+        <div class="FAQs">
+
+            <div class="faq-header">
+
+                <h2>
+                    Your FAQs
+                </h2>
+
+            </div>
+
+            <div 
+                id="faqList" 
+                class="faq-list"
+            >
+
+                <!-- FAQS LOAD HERE -->
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- UPDATE MODAL -->
+    <div 
+        class="modal-overlay" 
+        id="modalOverlay"
+    >
+
+        <div class="update-modal">
+
+            <h2>
+                Update FAQ
+            </h2>
+
+            <form id="updateFaqForm">
+
+                <input 
+                    type="hidden"
+                    id="updateId"
+                >
+
+                <input 
+                    type="text"
+                    id="updateQuestion"
+                    placeholder="Question"
+                    required
+                >
+
+                <textarea 
+                    id="updateAnswer"
+                    placeholder="Answer"
+                    required
+                ></textarea>
+
+                <div class="modal-buttons">
+
+                    <button type="submit">
+                        Update
+                    </button>
+
+                    <button 
+                        type="button"
+                        class="cancel-btn"
+                        id="closeModal"
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+<script>
+
+    const faqList =
+        document.getElementById("faqList");
+
+    const modalOverlay =
+        document.getElementById("modalOverlay");
+
+    const updateFaqForm =
+        document.getElementById("updateFaqForm");
+
+    const closeModal =
+        document.getElementById("closeModal");
+
+    // LOAD FAQS
+
+    async function loadFAQs(){
+
+        try{
+
+            const response = await fetch(
+                "https://ai-receptionist-nj3f.onrender.com/FAQ/"
+            );
+
+            const result = await response.json();
+
+            console.log(result);
+
+            const faqs = result.data;
+
+            faqList.innerHTML = "";
+
+            // EMPTY STATE
+
+            if(faqs.length === 0){
+
+                faqList.innerHTML = `
+                
+                    <div class="empty-state">
+
+                        <h3>
+                            No FAQ Created Yet
+                        </h3>
+
+                        <p>
+                            Create your first FAQ
+                            to train Omni AI.
+                        </p>
+
+                    </div>
+                
+                `;
+
+                return;
+            }
+
+            // DISPLAY FAQS
+
+            faqs.forEach((faq)=>{
+
+                faqList.innerHTML += `
+                
+                    <div class="faq-card">
+
+                        <div class="faq-content">
+
+                            <h3>
+                                ${faq.question}
+                            </h3>
+
+                            <p>
+                                ${faq.answer}
+                            </p>
+
+                        </div>
+
+                        <div class="faq-actions">
+
+                            <!-- EDIT -->
+                            <button 
+                                class="edit-btn"
+
+                                onclick="openUpdateModal(
+                                    '${faq._id}',
+                                    \`${faq.question}\`,
+                                    \`${faq.answer}\`
+                                )"
+                            >
+
+                                <i class="fa-solid fa-pen"></i>
+
+                            </button>
+
+                            <!-- DELETE -->
+                            <button 
+                                class="delete-btn"
+
+                                onclick="deleteFAQ(
+                                    '${faq._id}'
+                                )"
+                            >
+
+                                <i class="fa-solid fa-trash"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+                
+                `;
+
+            });
+
+        }catch(err){
+
+            console.log(err);
+
+        }
+
+    }
+
+    loadFAQs();
+
+    // DELETE FAQ
+
+    async function deleteFAQ(id){
+
+        const confirmDelete = confirm(
+            "Delete this FAQ?"
+        );
+
+        if(!confirmDelete){
+            return;
+        }
+
+        try{
+
+            await fetch(
+                `https://ai-receptionist-nj3f.onrender.com/FAQ/${id}`,
+                {
+                    method:"DELETE"
+                }
+            );
+
+            loadFAQs();
+
+        }catch(err){
+
+            console.log(err);
+
+        }
+
+    }
+
+    // OPEN UPDATE MODAL
+
+    function openUpdateModal(
+        id,
+        question,
+        answer
+    ){
+
+        modalOverlay.classList.add("active");
+
+        document.getElementById(
+            "updateId"
+        ).value = id;
+
+        document.getElementById(
+            "updateQuestion"
+        ).value = question;
+
+        document.getElementById(
+            "updateAnswer"
+        ).value = answer;
+
+    }
+
+    // CLOSE MODAL
+
+    closeModal.addEventListener(
+        "click",
+        ()=>{
+
+            modalOverlay.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+    // UPDATE FAQ
+
+    updateFaqForm.addEventListener(
+        "submit",
+
+        async (e)=>{
+
+            e.preventDefault();
+
+            const data = {
+
+                recordid:
+                    document.getElementById(
+                        "updateId"
+                    ).value,
+
+                question:
+                    document.getElementById(
+                        "updateQuestion"
+                    ).value,
+
+                answer:
+                    document.getElementById(
+                        "updateAnswer"
+                    ).value
+
+            };
+
+            try{
+
+                await fetch(
+                    "https://ai-receptionist-nj3f.onrender.com/FAQ/edit",
+
+                    {
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify(data)
+                    }
+                );
+
+                modalOverlay.classList.remove(
+                    "active"
+                );
+
+                loadFAQs();
+
+            }catch(err){
+
+                console.log(err);
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>

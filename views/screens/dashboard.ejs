@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | LCRP</title>
+    <link rel="stylesheet" href="/stylesheets/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>LCRP</h1>
+        </div>
+
+        <nav>
+
+            <a href="/dashboard" class="active">
+                Dashboard
+            </a>
+
+            <a href="/user/leed">
+                Leads
+            </a>
+
+            <a href="/faq">
+                FAQ Management
+            </a>
+
+            <a href="/chat">
+                AI Chat
+            </a>
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <header class="topbar">
+
+            <div>
+                <h2>
+                    Welcome Back,
+                    <%= user.fullName %>
+                </h2>
+
+                <p>
+                    Manage leads, AI chats and FAQs from one place.
+                </p>
+            </div>
+
+        </header>
+
+        <!-- FLASH -->
+        <div id="flashWrapper" class="flash-wrapper">
+
+            <button
+                class="close-flash"
+                onclick="closeFlash()"
+            >
+                ×
+            </button>
+
+            <%- include('../component/flashmessage') %>
+
+        </div>
+
+        <!-- STATS -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <h3 id="totalLeads">0</h3>
+                <p>Total Leads</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="newLeads">0</h3>
+                <p>New Leads</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="wonLeads">0</h3>
+                <p>Won Jobs</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="lostLeads">0</h3>
+                <p>Lost Jobs</p>
+            </div>
+
+        </section>
+
+        <!-- QUICK ACTIONS -->
+        <section class="actions">
+
+            <a href="/faq" class="action-card">
+                <span>📚</span>
+                <h3>FAQ Management</h3>
+                <p>
+                    Create and manage your AI knowledge base.
+                </p>
+            </a>
+
+            <a href="/chat" class="action-card">
+                <span>🤖</span>
+                <h3>AI Chat</h3>
+                <p>
+                    Test and interact with your AI assistant.
+                </p>
+            </a>
+
+        </section>
+
+        <!-- RECENT LEADS -->
+        <section class="lead-section">
+
+            <div class="section-title">
+                <h3>Recent Leads</h3>
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Source</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="leadTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+<script>
+
+function closeFlash() {
+
+    const flash =
+        document.getElementById("flashWrapper");
+
+    if(flash){
+        flash.style.display = "none";
+    }
+
+}
+
+async function loadLeads(){
+
+    try{
+
+        const response =
+            await fetch('/user/leed');
+
+        const leads =
+            await response.json();
+
+        document.getElementById(
+            "totalLeads"
+        ).textContent = leads.length;
+
+        const newLeads =
+            leads.filter(
+                l => l.status?.toLowerCase() === "new"
+            ).length;
+
+        const wonLeads =
+            leads.filter(
+                l => l.status?.toLowerCase() === "won"
+            ).length;
+
+        const lostLeads =
+            leads.filter(
+                l => l.status?.toLowerCase() === "lost"
+            ).length;
+
+        document.getElementById(
+            "newLeads"
+        ).textContent = newLeads;
+
+        document.getElementById(
+            "wonLeads"
+        ).textContent = wonLeads;
+
+        document.getElementById(
+            "lostLeads"
+        ).textContent = lostLeads;
+
+        const table =
+            document.getElementById("leadTable");
+
+        table.innerHTML = "";
+
+        leads.forEach(lead => {
+
+            table.innerHTML += `
+                <tr>
+                    <td>${lead.name}</td>
+                    <td>${lead.phoneNumber}</td>
+                    <td>${lead.source}</td>
+                    <td>
+                        <span class="status ${lead.status}">
+                            ${lead.status}
+                        </span>
+                    </td>
+                </tr>
+            `;
+
+        });
+
+    }
+    catch(error){
+
+        console.log(error);
+
+    }
+
+}
+
+loadLeads();
+
+</script>
+
+</body>
+</html>

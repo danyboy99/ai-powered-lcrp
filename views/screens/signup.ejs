@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | LCRP</title>
+    <link rel="stylesheet" href="/stylesheets/auth.css">
+</head>
+<body>
+
+    <div class="auth-container">
+
+        <div class="auth-left">
+            <div class="content">
+                <h1>LCRP</h1>
+                <h2>Start Recovering Lost Leads</h2>
+
+                <p>
+                    Create your account and start converting missed calls into paying customers using AI-powered automation.
+                </p>
+            </div>
+        </div>
+
+        <div class="auth-right">
+
+            <div class="form-card signup-card">
+
+                <h2>Create Account</h2>
+                <p>Join the platform today</p>
+
+                <div class="flash-wrapper">
+                    <%- include('../component/flashmessage') %>
+                </div>
+
+                <form action="/user/signup" method="post">
+
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input
+                            type="text"
+                            name="fullName"
+                            placeholder="John Doe"
+                            required
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Create password"
+                            required
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label>Business Name</label>
+                        <input
+                            type="text"
+                            name="brandName"
+                            placeholder="ABC Plumbing"
+                            required
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input
+                            type="text"
+                            name="phoneNumber"
+                            placeholder="+234..."
+                            required
+                        >
+                    </div>
+
+                    <button type="submit">
+                        Create Account
+                    </button>
+
+                </form>
+
+                <div class="bottom-link">
+                    Already have an account?
+                    <a href="/user/login">Login</a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

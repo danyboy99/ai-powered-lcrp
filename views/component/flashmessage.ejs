@@ -1,0 +1,87 @@
+<style>
+
+.server-msg{
+    width: 100%;
+
+    margin-bottom: 25px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+.error{
+    background: rgba(239,68,68,0.12);
+
+    border: 1px solid rgba(239,68,68,0.3);
+
+    color: #fca5a5;
+
+    padding: 16px;
+
+    border-radius: 12px;
+
+    font-size: 0.95rem;
+
+    animation: slideDown 0.4s ease;
+}
+
+.success{
+    background: rgba(34,197,94,0.12);
+
+    border: 1px solid rgba(34,197,94,0.3);
+
+    color: #86efac;
+
+    padding: 16px;
+
+    border-radius: 12px;
+
+    font-size: 0.95rem;
+
+    animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown{
+
+    from{
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+</style>
+
+<div class="server-msg">
+
+    <% if(hasErr){ %>
+
+        <% errMsg.forEach(message => { %>
+
+            <p class="error">
+                <%= message %>
+            </p>
+
+        <% }) %>
+
+    <% } %>
+
+    <% if(hasSuccess){ %>
+
+        <% successMsg.forEach(message => { %>
+
+            <p class="success">
+                <%= message %>
+            </p>
+
+        <% }) %>
+
+    <% } %>
+
+</div>
