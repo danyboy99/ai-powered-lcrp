@@ -248,6 +248,19 @@ const get_FAQManagement = async (req,res) =>{
     })
 }
 
+const get_leadManagemant = async (req,res) =>{
+    const successMsg = req.flash("success");
+     const errMsg = req.flash("error"); 
+     const user = req.user 
+     res.render("screens/leadscreen" ,{
+         hasErr: errMsg.length > 0,
+        hasSuccess: successMsg.length > 0,
+        errMsg: errMsg,
+        successMsg: successMsg,
+        user
+    })
+}
+
 const getAllLeads = async (req,res) =>{
     try{
         const user = req.user ;
@@ -280,7 +293,22 @@ const getSingleLead = async (req,res) =>{
     }
 }
 
-
+const updateLead = async (req,res) =>{
+    let successMsg = [] ;
+    try{
+        const user = req.user ;
+        const {status} = req.params
+        const updatedLead = await leadServices.changeLeadStatus(user._id,status) ; 
+        successMsg.push("lead updated successfuly !!") ;
+        req.flash("success", successMsg);
+        return res.json("done") ;
+    }catch(err){
+        return res.json({
+            status:"failed",
+            err
+        })
+    }
+}
 
 
 module.exports = {
@@ -293,5 +321,7 @@ get_dashboard,
 get_verifyCode ,
 getAllLeads,
 getSingleLead,
-get_FAQManagement
+get_FAQManagement,
+updateLead ,
+get_leadManagemant
 }

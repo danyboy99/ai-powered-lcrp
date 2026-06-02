@@ -17,30 +17,50 @@
 
 <body>
 
-    <!-- HEADER -->
-    <div class="header">
+<div class="dashboard">
 
-        <%- include('../components/header') %>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-    </div>
+        <div class="logo">
+            <h1>LCRP</h1>
+        </div>
 
-    <!-- FLASH MESSAGE -->
-    <div class="flash-wrapper">
+        <nav>
 
-        <%- include('../components/flashmessage') %>
+            <a href="/dashboard">
+                Dashboard
+            </a>
 
-    </div>
+            <a href="/user/leed">
+                Leads
+            </a>
 
-    <!-- MAIN -->
-    <main class="faq-container">
+            <a href="/user/faq-management" class="active">
+                FAQ Management
+            </a>
 
-        <!-- CREATE FAQ -->
-        <div class="createFAQ">
+            <a href="/chat">
+                AI Chat
+            </a>
 
-            <div class="section-top">
+            <a href="/logout">
+                Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+
+        <header class="page-header">
+
+            <div>
 
                 <span class="badge">
-                    AI Training
+                    AI Training Center
                 </span>
 
                 <h1>
@@ -48,118 +68,150 @@
                 </h1>
 
                 <p>
-                    Create FAQs for your Omni AI assistant.
-                    These FAQs will help your AI respond
-                    accurately to your customers.
+                    Train your AI assistant with accurate business information.
+                    The more FAQs you create, the smarter your assistant becomes.
                 </p>
 
             </div>
 
-            <!-- CREATE FORM -->
-            <form 
-                action="https://ai-receptionist-nj3f.onrender.com/FAQ/create" 
-                method="post"
-            >
+        </header>
 
-                <input 
-                    type="text"
-                    placeholder="Enter Question"
-                    name="question"
-                    required
-                >
+        <!-- FLASH -->
+        <div class="flash-wrapper">
 
-                <textarea 
-                    placeholder="Enter Answer"
-                    name="answer"
-                    required
-                ></textarea>
-
-                <button type="submit">
-                    Create FAQ
-                </button>
-
-            </form>
+            <%- include('../component/flashmessage') %>
 
         </div>
 
-        <!-- FAQ LIST -->
-        <div class="FAQs">
+        <!-- MAIN GRID -->
+        <main class="faq-container">
 
-            <div class="faq-header">
+            <!-- CREATE FAQ -->
+            <section class="createFAQ">
 
-                <h2>
-                    Your FAQs
-                </h2>
+                <div class="card-header">
 
-            </div>
+                    <h2>
+                        Create New FAQ
+                    </h2>
 
-            <div 
-                id="faqList" 
-                class="faq-list"
-            >
-
-                <!-- FAQS LOAD HERE -->
-
-            </div>
-
-        </div>
-
-    </main>
-
-    <!-- UPDATE MODAL -->
-    <div 
-        class="modal-overlay" 
-        id="modalOverlay"
-    >
-
-        <div class="update-modal">
-
-            <h2>
-                Update FAQ
-            </h2>
-
-            <form id="updateFaqForm">
-
-                <input 
-                    type="hidden"
-                    id="updateId"
-                >
-
-                <input 
-                    type="text"
-                    id="updateQuestion"
-                    placeholder="Question"
-                    required
-                >
-
-                <textarea 
-                    id="updateAnswer"
-                    placeholder="Answer"
-                    required
-                ></textarea>
-
-                <div class="modal-buttons">
-
-                    <button type="submit">
-                        Update
-                    </button>
-
-                    <button 
-                        type="button"
-                        class="cancel-btn"
-                        id="closeModal"
-                    >
-                        Cancel
-                    </button>
+                    <p>
+                        Add knowledge that your AI assistant can use when responding to customers.
+                    </p>
 
                 </div>
 
-            </form>
+                <form
+                    action="/FAQ/"
+                    method="post"
+                >
 
-        </div>
+                    <input
+                        type="text"
+                        name="question"
+                        placeholder="Enter Question"
+                        required
+                    >
+
+                    <textarea
+                        name="answer"
+                        placeholder="Enter Answer"
+                        required
+                    ></textarea>
+
+                    <button type="submit">
+                        Create FAQ
+                    </button>
+
+                </form>
+
+            </section>
+
+            <!-- FAQ LIST -->
+            <section class="FAQs">
+
+                <div class="card-header">
+
+                    <h2>
+                        Knowledge Base
+                    </h2>
+
+                    <p>
+                        Manage your existing FAQs.
+                    </p>
+
+                </div>
+
+                <div
+                    id="faqList"
+                    class="faq-list"
+                >
+
+                </div>
+
+            </section>
+
+        </main>
 
     </div>
 
+</div>
+
+<!-- UPDATE MODAL -->
+<div
+    class="modal-overlay"
+    id="modalOverlay"
+>
+
+    <div class="update-modal">
+
+        <h2>
+            Update FAQ
+        </h2>
+
+        <form id="updateFaqForm">
+
+            <input
+                type="hidden"
+                id="updateId"
+            >
+
+            <input
+                type="text"
+                id="updateQuestion"
+                placeholder="Question"
+                required
+            >
+
+            <textarea
+                id="updateAnswer"
+                placeholder="Answer"
+                required
+            ></textarea>
+
+            <div class="modal-buttons">
+
+                <button type="submit">
+                    Update FAQ
+                </button>
+
+                <button
+                    type="button"
+                    id="closeModal"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- KEEP YOUR EXISTING SCRIPT EXACTLY AS IT IS -->
 <script>
 
     const faqList =
@@ -181,7 +233,7 @@
         try{
 
             const response = await fetch(
-                "https://ai-receptionist-nj3f.onrender.com/FAQ/"
+                "http://127.0.0.1:8000/FAQ/"
             );
 
             const result = await response.json();
@@ -299,7 +351,7 @@
         try{
 
             await fetch(
-                `https://ai-receptionist-nj3f.onrender.com/FAQ/${id}`,
+                `http://127.0.0.1:8000/FAQ/${id}`,
                 {
                     method:"DELETE"
                 }
@@ -383,10 +435,10 @@
             try{
 
                 await fetch(
-                    "https://ai-receptionist-nj3f.onrender.com/FAQ/edit",
+                    "http://127.0.0.1:8000/FAQ/",
 
                     {
-                        method:"POST",
+                        method:"PUT",
 
                         headers:{
                             "Content-Type":

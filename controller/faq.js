@@ -53,7 +53,7 @@ const deleteFAQ = async (req,res) =>{
 const getAllFAQ = async (req,res) =>{
     try{
         const user = req.user 
-        const foundFAQ = await FAQServices.getFAQByLicensedkey(user._id) ;
+        const foundFAQ = await FAQServices.getFAQByUserId(user._id) ;
         return res.json({
             status:"success",
             data: foundFAQ

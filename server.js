@@ -9,6 +9,7 @@ const session = require("express-session");
 const cors = require("cors") ;
 const userRoutes = require("./routes/user") ;
 const webhookRoutes = require("./routes/webhook") ;
+const faqRoutes = require("./routes/faq")
 
 //start application
 const app = express()
@@ -60,7 +61,9 @@ app.get("/", (req, res) => {
   });
 });
 app.use("/user", userRoutes);
-app.use("/api/webhook", webhookRoutes);
+app.use("/api/webhook", webhookRoutes); 
+app.use("/FAQ", faqRoutes)
+
 
 
 let port = process.env.PORT || 8000;

@@ -16,9 +16,13 @@ router.get("/dashboard", auth.isUserLoggedIn , userController.get_dashboard) ;
 
 router.get("/faq-management",auth.isUserLoggedIn ,userController.get_FAQManagement )
 
-router.get("/leed",auth.isUserLoggedIn ,userController.getAllLeads ) ;
+router.get("/lead-management", auth.isUserLoggedIn, userController.get_leadManagemant)
 
-router.get("/single-leed",auth.isUserLoggedIn ,userController.getSingleLead  ) ;
+router.get("/lead",auth.isUserLoggedIn ,userController.getAllLeads ) ;
+
+router.get("/single-lead",auth.isUserLoggedIn ,userController.getSingleLead  ) ; 
+
+router.get("/update-lead", auth.isUserLoggedIn, userController.updateLead)
 
 
 
