@@ -18,7 +18,11 @@
 <body>
 
 <div class="dashboard">
+<button class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </button>
 
+    <div class="sidebar-overlay" onclick="toggleMenu()"></div>
     <!-- SIDEBAR -->
     <aside class="sidebar">
 
@@ -43,7 +47,7 @@
             <a href="/ai/chats">
                 AI Chat
             </a>
-            
+
               <a href="/user/settings">
                 Settings
             </a> 
@@ -218,6 +222,9 @@
 <!-- KEEP YOUR EXISTING SCRIPT EXACTLY AS IT IS -->
 <script>
 
+    function toggleMenu(){
+        document.body.classList.toggle("menu-open");
+    }
     const faqList =
         document.getElementById("faqList");
 

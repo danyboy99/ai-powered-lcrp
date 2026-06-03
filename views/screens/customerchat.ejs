@@ -15,7 +15,11 @@
 <body>
 
 <div class="dashboard">
+    <button class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </button>
 
+    <div class="sidebar-overlay" onclick="toggleMenu()"></div>
     <!-- SIDEBAR -->
     <aside class="sidebar">
 
@@ -162,6 +166,10 @@
     </div>
 
 </div>
-
+<script>
+    function toggleMenu(){
+        document.body.classList.toggle("menu-open");
+    }
+</script>
 </body>
 </html>

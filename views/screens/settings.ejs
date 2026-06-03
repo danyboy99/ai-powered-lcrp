@@ -16,7 +16,11 @@
 <body>
 
 <div class="dashboard">
+<button class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </button>
 
+    <div class="sidebar-overlay" onclick="toggleMenu()"></div>
     <aside class="sidebar">
 
         <div class="logo">
@@ -178,6 +182,10 @@
     </main>
 
 </div>
-
+<script>
+    function toggleMenu(){
+        document.body.classList.toggle("menu-open");
+    }
+</script>
 </body>
 </html>

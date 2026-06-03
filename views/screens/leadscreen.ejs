@@ -15,7 +15,11 @@
 <body>
 
 <div class="dashboard">
+<button class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </button>
 
+    <div class="sidebar-overlay" onclick="toggleMenu()"></div>
     <!-- SIDEBAR -->
     <aside class="sidebar">
 
@@ -121,7 +125,9 @@
 </div>
 
 <script>
-
+function toggleMenu(){
+        document.body.classList.toggle("menu-open");
+    }
 const leadTable =
     document.getElementById("leadTable");
 
