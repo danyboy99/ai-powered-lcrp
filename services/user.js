@@ -64,10 +64,28 @@ const verifyCode = async (user_id, code) =>{
         throw err 
     }
 }
+const editProfile  = async (id,fullName,brandName ) =>{
+    try{
+        const updatedUser = await User.findByIdAndUpdate(id,{fullName,brandName}) ;
+        return updatedUser
+    }catch(err){
+        throw err
+    }
+}
+const changePassword = async (id , password) =>{
+    try{
+        const updatedUser = await User.findByIdAndUpdate(id,{password}) ;
+        return updatedUser
+    }catch(err){
+        throw err
+    }
+}
 module.exports= {
     createUser, 
     getUserById,
     getUserByEmail,
     createVerificationCode,
-    verifyCode
+    verifyCode ,
+    editProfile ,
+    changePassword
 }

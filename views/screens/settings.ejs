@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | LCRP</title>
+
+    <link rel="stylesheet" href="/stylesheets/settings.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+</head>
+<body>
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>LCRP</h1>
+        </div>
+
+        <nav>
+            <a href="/user/dashboard">Dashboard</a>
+            <a href="/user/lead-management">Leads</a>
+            <a href="/user/faq-management">FAQ Management</a>
+            <a href="/ai/chats">AI Chat</a>
+            <a href="/user/settings" class="active">Settings</a>
+            <a href="/user/logout">Logout</a>
+        </nav>
+
+    </aside>
+
+    <main class="content">
+
+        <header class="settings-header">
+            <div>
+                <h1>Settings</h1>
+                <p>Manage your business profile, security details, and Twilio call recovery setup.</p>
+            </div>
+        </header>
+
+        <div class="flash-wrapper">
+            <%- include('../component/flashmessage') %>
+        </div>
+
+        <section class="settings-grid">
+
+            <div class="settings-card">
+                <div class="card-heading">
+                    <div class="card-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div>
+                        <h2>Update Profile</h2>
+                        <p>Keep your business information up to date.</p>
+                    </div>
+                </div>
+
+                <form action="/user/update-profile" method="POST" class="settings-form">
+
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            value="<%= user.fullName || '' %>"
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="brandName">Business / Brand Name</label>
+                        <input
+                            type="text"
+                            id="brandName"
+                            name="brandName"
+                            value="<%= user.brandName || '' %>"
+                            placeholder="Enter your business name"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="primary-btn">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Save Profile
+                    </button>
+
+                </form>
+            </div>
+
+            <div class="settings-card">
+                <div class="card-heading">
+                    <div class="card-icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+
+                    <div>
+                        <h2>Change Password</h2>
+                        <p>Update your password to keep your account secure.</p>
+                    </div>
+                </div>
+
+                <form action="/user/change-password" method="POST" class="settings-form">
+
+                    <div class="form-group">
+                        <label for="password">New Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter new password"
+                            minlength="6"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="primary-btn">
+                        <i class="fa-solid fa-key"></i>
+                        Update Password
+                    </button>
+
+                </form>
+            </div>
+
+        </section>
+
+        <section class="integration-card">
+
+            <div class="integration-header">
+                <div class="card-icon">
+                    <i class="fa-solid fa-phone-volume"></i>
+                </div>
+
+                <div>
+                    <h2>Twilio Missed Call Webhook</h2>
+                    <p>Use this webhook URL in your Twilio phone number voice configuration.</p>
+                </div>
+            </div>
+
+            <div class="webhook-box">
+                <span id="webhookUrl">
+                    https://ai-powered-lcrp.onrender.com/api/webhook/<%= user._id %>/incomingcall
+                </span>
+            </div>
+
+            <div class="guide">
+                <h3>How to connect Twilio</h3>
+
+                <ol>
+                    <li>Log in to your Twilio Console.</li>
+                    <li>Go to <strong>Phone Numbers</strong>, then open your active Twilio number.</li>
+                    <li>Click the <strong>Configure</strong> tab.</li>
+                    <li>Under <strong>Voice Configuration</strong>, find <strong>A call comes in</strong>.</li>
+                    <li>Select <strong>Webhook</strong> as the handler.</li>
+                    <li>Paste the webhook URL above into the URL field.</li>
+                    <li>Set the request method to <strong>HTTP POST</strong>.</li>
+                    <li>Scroll down and click <strong>Save configuration</strong>.</li>
+                </ol>
+
+                <div class="note-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <p>
+                        When a customer calls your Twilio number, Twilio will send the call details to this webhook.
+                        The system will then forward the call to your saved phone number and create a lead if the call is missed, busy, failed, or cancelled.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

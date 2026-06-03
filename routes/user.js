@@ -22,18 +22,24 @@ router.get("/lead",auth.isUserLoggedIn ,userController.getAllLeads ) ;
 
 router.get("/single-lead",auth.isUserLoggedIn ,userController.getSingleLead  ) ; 
 
-router.get("/update-lead", auth.isUserLoggedIn, userController.updateLead)
+router.get("/settings", auth.isUserLoggedIn , userController.get_settings)
+
+router.get("/logout",auth.isUserLoggedIn , userController.logout )
 
 
-
-
-// post routes
+// post/put routes
 
 router.post("/login",auth.loginIsVerified,passport.authenticate("user.login", { failureRedirect: "/user/login",failureFlash: true,successRedirect: "/user/dashboard",})) ;
 
 router.post("/signup", userController.post_signUp) ;
 
 router.post("/verify-code", userController.post_verifyCode)
+
+router.put("/update-lead/:id/:status", auth.isUserLoggedIn, userController.updateLead) ;
+
+router.post("/update-profile",auth.loginIsVerified ,userController.post_updateprofile) 
+
+router.post("/change-password",auth.loginIsVerified ,userController.post_changepassword)
 
 
 module.exports = router;

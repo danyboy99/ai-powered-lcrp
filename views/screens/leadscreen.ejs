@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Management | LCRP</title>
+
+    <link rel="stylesheet" href="/stylesheets/lead.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>LCRP</h1>
+        </div>
+
+        <nav>
+
+            <a href="/user/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/user/lead-management" class="active">
+                Leads
+            </a>
+
+            <a href="/user/faq-management">
+                FAQ Management
+            </a>
+
+            <a href="/ai/chats">
+                AI Chat
+            </a>
+
+            <a href="/user/settings">
+                Settings
+            </a> 
+
+
+            <a href="/user/logout">
+                Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <header class="page-header">
+
+            <span class="badge">
+                Lead Recovery System
+            </span>
+
+            <h1>
+                Lead Management
+            </h1>
+
+            <p>
+                View and manage all customer leads captured through your AI-powered recovery platform.
+            </p>
+
+        </header>
+
+        <div class="flash-wrapper">
+            <%- include('../component/flashmessage') %>
+        </div>
+
+        <section class="lead-card">
+
+            <div class="card-header">
+
+                <h2>
+                    Customer Leads
+                </h2>
+
+                <p>
+                    Update lead status and track customer progress.
+                </p>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Phone Number</th>
+                            <th>Source</th>
+                            <th>Status</th>
+                            <th>Update Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="leadTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+<script>
+
+const leadTable =
+    document.getElementById("leadTable");
+
+async function loadLeads(){
+
+    try{
+
+        const response =
+            await fetch("/user/lead");
+
+        const result =
+            await response.json();
+
+        console.log(result);
+
+        const leads =
+            result.data || result || [];
+
+        leadTable.innerHTML = "";
+
+        if(leads.length === 0){
+
+            leadTable.innerHTML = `
+                <tr>
+                    <td colspan="4">
+                        No Leads Found
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        leads.forEach((lead)=>{
+
+            const statusClass =
+                lead.status
+                    .replace(/\s+/g,"-")
+                    .toLowerCase();
+
+            leadTable.innerHTML += `
+                <tr>
+
+                    <td>${lead.phoneNumber}</td>
+
+                    <td>${lead.source}</td>
+
+                    <td>
+                        <span class="status ${statusClass}">
+                            ${lead.status}
+                        </span>
+                    </td>
+
+                    <td>
+
+    <select
+        class="status-select"
+        onchange="updateLeadStatus('${lead._id}', this.value)"
+    >
+
+        <option
+            value="New Lead"
+            ${lead.status === "New Lead" ? "selected" : ""}
+        >
+            New Lead
+        </option>
+
+        <option
+            value="Contacted"
+            ${lead.status === "Contacted" ? "selected" : ""}
+        >
+            Contacted
+        </option>
+
+        <option
+            value="Quote Sent"
+            ${lead.status === "Quote Sent" ? "selected" : ""}
+        >
+            Quote Sent
+        </option>
+
+        <option
+            value="Won"
+            ${lead.status === "Won" ? "selected" : ""}
+        >
+            Won
+        </option>
+
+        <option
+            value="Lost"
+            ${lead.status === "Lost" ? "selected" : ""}
+        >
+            Lost
+        </option>
+
+    </select>
+
+</td>
+
+                </tr>
+            `;
+
+        });
+
+    }catch(err){
+
+        console.log("Lead Error:", err);
+
+    }
+
+}
+
+async function updateLeadStatus(id, status){
+
+    if(!status) return;
+
+    try{
+
+        const response = await fetch(
+            `/user/update-lead/${id}/${encodeURIComponent(status)}`,
+            {
+                method:"PUT"
+            }
+        );
+
+        const result = await response.json();
+
+        console.log(result);
+
+        loadLeads();
+
+    }catch(err){
+
+        console.log(err);
+
+    }
+
+}
+
+loadLeads();
+
+</script>
+
+</body>
+</html>

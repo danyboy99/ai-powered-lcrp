@@ -24,7 +24,8 @@ const changeLeadStatus = async (id,status) =>{
 }
 const getLead = async (user) =>{
     try{
-        const foundLead = await Lead.find({user}) 
+        const checkthis = user.toString()
+        const foundLead = await Lead.find({user: checkthis})  
         return foundLead
     }catch(err){
         throw err

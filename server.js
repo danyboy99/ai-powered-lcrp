@@ -9,7 +9,8 @@ const session = require("express-session");
 const cors = require("cors") ;
 const userRoutes = require("./routes/user") ;
 const webhookRoutes = require("./routes/webhook") ;
-const faqRoutes = require("./routes/faq")
+const faqRoutes = require("./routes/faq") ;
+const chatRoutes = require("./routes/chat") ;
 
 //start application
 const app = express()
@@ -62,7 +63,8 @@ app.get("/", (req, res) => {
 });
 app.use("/user", userRoutes);
 app.use("/api/webhook", webhookRoutes); 
-app.use("/FAQ", faqRoutes)
+app.use("/FAQ", faqRoutes) ;
+app.use("/ai", chatRoutes)
 
 
 

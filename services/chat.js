@@ -97,12 +97,12 @@ ${prompt}
   }
 };
 
-const createChat = async (role,email,licensedKey,content) =>{
+const createChat = async (user,role,phoneNumber,content) =>{
   try{
     const newChat = await Chat.create({
+      user,
       role,
-      email,
-      licensedKey,
+      phoneNumber,
       content
     })
     return newChat
@@ -111,16 +111,16 @@ const createChat = async (role,email,licensedKey,content) =>{
   }
 }
 
-const getChatByCustomerphoneNumber = async (phoneNumber) =>{
+const getChatByCustomerphoneNumber = async (user,phoneNumber) =>{
   try{
-    const foundChat = await Chat.find({phoneNumber}) ;
+    const foundChat = await Chat.find({user,phoneNumber}) ;
     return foundChat ;
   }catch(err){
     throw err
   }
 }
 
-const getChatByCustomerEmailIN24Hours = async (email,licensedKey) => {
+const getChatByCustomerPhoneNumberIN24Hours = async (phoneNumber,user) => {
 
   try {
 
@@ -133,8 +133,8 @@ const getChatByCustomerEmailIN24Hours = async (email,licensedKey) => {
     );
 
     const foundChat = await Chat.find({
-      licensedKey,
-      email: email,
+      user,
+      phoneNumber,
       createdAt: {
         $gte: last24Hours
       }
@@ -150,19 +150,34 @@ const getChatByCustomerEmailIN24Hours = async (email,licensedKey) => {
 
 }
 
-const checkCustomerFullChat = async (licensedKey, email) =>{
+const checkCustomerFullChat = async (user, phoneNumber) =>{
   try{
-    const foundChats = await Chat.find({licensedKey, email}) ;
+    const foundChats = await Chat.find({user, phoneNumber}) ;
     return foundChats
   }catch(err){
     throw err
   }
 }
-
+const getChatNumbers = async (user) =>{
+  try{
+    const foundRecord = await Chat.find({user}) 
+    let result = []
+    foundRecord.forEach(chats =>{
+      if(!result.includes(chats.phoneNumber)){
+           result.push(chats.phoneNumber)
+      }
+    })
+    return result 
+  }catch(err){
+    throw err
+  }
+}
 module.exports = {
   getOpenRouterClient,
   createChat,
-  getChatByCustomerEmail,
-  getChatByCustomerEmailIN24Hours,
-  checkCustomerFullChat
+  getChatByCustomerphoneNumber,
+  getChatByCustomerPhoneNumberIN24Hours,
+  checkCustomerFullChat,
+ generateResponse,
+ getChatNumbers
 };

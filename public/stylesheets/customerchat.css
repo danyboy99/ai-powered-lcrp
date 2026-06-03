@@ -1,0 +1,260 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f8fafc;
+}
+
+.dashboard{
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:260px;
+    background:#1e3a8a;
+    color:white;
+    padding:30px 20px;
+    position:fixed;
+    height:100vh;
+}
+
+.logo{
+    margin-bottom:50px;
+}
+
+.logo h1{
+    font-size:2rem;
+}
+
+.sidebar nav{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.sidebar nav a{
+    color:white;
+    text-decoration:none;
+    padding:14px;
+    border-radius:10px;
+    transition:.3s;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active{
+    background:rgba(255,255,255,.15);
+}
+
+/* CONTENT */
+
+.content{
+    flex:1;
+    margin-left:260px;
+    padding:30px;
+}
+
+/* HEADER */
+
+.chat-header{
+    background:white;
+    border-radius:16px;
+    padding:22px 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 8px 22px rgba(15,23,42,.06);
+    margin-bottom:20px;
+}
+
+.header-left{
+    display:flex;
+    gap:14px;
+    align-items:center;
+}
+
+.avatar{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:#dbeafe;
+    color:#2563eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.25rem;
+}
+
+.chat-header h1{
+    font-size:1.4rem;
+    margin-bottom:4px;
+    color:#0f172a;
+}
+
+.chat-header p{
+    color:#64748b;
+    font-size:.95rem;
+}
+
+.back-btn{
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    padding:11px 16px;
+    border-radius:10px;
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+}
+
+.back-btn:hover{
+    opacity:.9;
+}
+
+/* CHAT */
+
+.chat-container{
+    min-height:72vh;
+    max-width:980px;
+    margin:0 auto;
+    padding:22px 18px;
+    border-radius:16px;
+    background:
+        linear-gradient(rgba(238,242,247,.88), rgba(238,242,247,.88)),
+        repeating-linear-gradient(
+            45deg,
+            rgba(148,163,184,.12) 0,
+            rgba(148,163,184,.12) 1px,
+            transparent 1px,
+            transparent 18px
+        );
+    box-shadow:0 8px 22px rgba(15,23,42,.06);
+}
+
+.message{
+    display:flex;
+    width:100%;
+    margin-bottom:10px;
+}
+
+.message.user{
+    justify-content:flex-end;
+}
+
+.message.assistant{
+    justify-content:flex-start;
+}
+
+.message-content{
+    width:fit-content;
+    max-width:min(68%, 560px);
+    padding:8px 10px 6px;
+    border-radius:8px;
+    position:relative;
+    box-shadow:0 1px 2px rgba(15,23,42,.12);
+    white-space:normal;
+}
+
+.message.user .message-content{
+    background:#2563eb;
+    color:#ffffff;
+    border-top-right-radius:2px;
+}
+
+.message.assistant .message-content{
+    background:#ffffff;
+    color:#111827;
+    border-top-left-radius:2px;
+}
+
+.message-role{
+    font-size:.72rem;
+    font-weight:700;
+    margin-bottom:4px;
+    color:#2563eb;
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.message.user .message-role{
+    color:#ffffff;
+}
+
+.message-text{
+    font-size:.95rem;
+    line-height:1.45;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+.message-time{
+    margin-top:4px;
+    font-size:.68rem;
+    color:#ffffff;
+    text-align:right;
+    white-space:nowrap;
+}
+
+/* EMPTY */
+
+.empty-chat{
+    text-align:center;
+    padding:80px 20px;
+    color:#334155;
+}
+
+.empty-chat i{
+    font-size:3.5rem;
+    color:#2563eb;
+    margin-bottom:18px;
+}
+
+.empty-chat h2{
+    margin-bottom:8px;
+}
+
+.empty-chat p{
+    color:#64748b;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .content{
+        margin-left:0;
+        padding:16px;
+    }
+
+    .chat-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:14px;
+    }
+
+    .chat-container{
+        min-height:75vh;
+        padding:16px 10px;
+        border-radius:12px;
+    }
+
+    .message-content{
+        max-width:86%;
+    }
+
+    .message-text{
+        font-size:.92rem;
+    }
+}

@@ -181,6 +181,50 @@ const post_verifyCode = async (req,res) =>{
         return res.redirect("/user/verify-code") 
     }
 }
+const post_updateprofile = async (req,res) =>{
+     let errMsg = [];
+  let successMsg = [];
+    try{
+        const user = req.user
+        const{fullName, brandName} = req.body ;
+        const updatedProfile = await userService.editProfile(user._id, fullName, brandName) ;
+        successMsg.push("profile updated successfuly !!") ;
+        req.flash("success", successMsg); 
+        return res.redirect("/user/settings")
+    }catch(err){
+        errMsg.push(err.message);
+        req.flash("error", errMsg);
+        return res.redirect("/user/settings") 
+    }
+}
+const post_changepassword = async (req,res) =>{
+    try{
+        const user = req.user
+        const{password} = req.body ; 
+        const hashPassword = await argon.hash(password)
+        const updatedPassword = await userService.changePassword(user._id, hashPassword) ;
+        successMsg.push("password updated successfuly !!") ;
+        req.flash("success", successMsg); 
+        return res.redirect("/user/settings")
+    }catch(err){
+        errMsg.push(err.message);
+        req.flash("error", errMsg);
+        return res.redirect("/user/settings") 
+    }
+}
+const logout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log("Logout error:", err);
+
+      req.flash("error", "Unable to logout. Please try again.");
+      return res.redirect("/user/dashboard");
+    }
+
+    res.clearCookie("connect.sid");
+    return res.redirect("/user/login");
+  });
+};
 
 
 
@@ -261,6 +305,19 @@ const get_leadManagemant = async (req,res) =>{
     })
 }
 
+const get_settings = async (req,res) =>{
+    const successMsg = req.flash("success");
+     const errMsg = req.flash("error"); 
+     const user = req.user 
+     res.render("screens/settings" ,{
+         hasErr: errMsg.length > 0,
+        hasSuccess: successMsg.length > 0,
+        errMsg: errMsg,
+        successMsg: successMsg,
+        user
+    })
+}
+
 const getAllLeads = async (req,res) =>{
     try{
         const user = req.user ;
@@ -296,9 +353,9 @@ const getSingleLead = async (req,res) =>{
 const updateLead = async (req,res) =>{
     let successMsg = [] ;
     try{
-        const user = req.user ;
-        const {status} = req.params
-        const updatedLead = await leadServices.changeLeadStatus(user._id,status) ; 
+        const {status,id} = req.params
+        const updatedLead = await leadServices.changeLeadStatus(id,status) ; 
+        console.log("update", updatedLead)
         successMsg.push("lead updated successfuly !!") ;
         req.flash("success", successMsg);
         return res.json("done") ;
@@ -323,5 +380,9 @@ getAllLeads,
 getSingleLead,
 get_FAQManagement,
 updateLead ,
-get_leadManagemant
+get_leadManagemant ,
+logout,
+get_settings ,
+post_updateprofile,
+post_changepassword
 }

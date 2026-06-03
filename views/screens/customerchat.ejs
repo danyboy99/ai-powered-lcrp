@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Conversation | LCRP</title>
+
+    <link rel="stylesheet" href="/stylesheets/customerchat.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>LCRP</h1>
+        </div>
+
+        <nav>
+
+            <a href="/user/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/user/lead-management">
+                Leads
+            </a>
+
+            <a href="/user/faq-management">
+                FAQ Management
+            </a>
+
+            <a href="/ai/chats" class="active">
+                AI Chat
+            </a>
+
+              <a href="/user/settings">
+                Settings
+            </a> 
+
+
+            <a href="/user/logout">
+                Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <header class="chat-header">
+
+            <div class="header-left">
+
+                <div class="avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div>
+
+                    <h1>
+                        Customer Conversation
+                    </h1>
+
+                    <p>
+                        Review the conversation between the customer and your AI assistant.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <a
+                href="/ai/chats"
+                class="back-btn"
+            >
+                <i class="fa-solid fa-arrow-left"></i>
+                Back
+            </a>
+
+        </header>
+
+        <!-- FLASH -->
+        <div class="flash-wrapper">
+
+            <%- include('../component/flashmessage') %>
+
+        </div>
+
+        <!-- CHAT AREA -->
+        <div class="chat-container">
+
+            <% if(foundChat && foundChat.length > 0){ %>
+
+                <% foundChat.forEach(chat => { %>
+
+                    <div class="message <%= chat.role === 'assistant' ? 'assistant' : 'user' %>">
+
+                        <div class="message-content">
+
+                            <div class="message-role">
+
+                                <% if(chat.role === "assistant"){ %>
+
+                                    <i class="fa-solid fa-robot"></i>
+                                    AI Assistant
+
+                                <% } else { %>
+
+                                    <i class="fa-solid fa-user"></i>
+                                    Customer
+
+                                <% } %>
+
+                            </div>
+
+                            <div class="message-text">
+                                <%= chat.content %>
+                            </div>
+
+                            <div class="message-time">
+
+                                <%= new Date(chat.createdAt).toLocaleString() %>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            <% } else { %>
+
+                <div class="empty-chat">
+
+                    <i class="fa-solid fa-comments"></i>
+
+                    <h2>
+                        No Messages Found
+                    </h2>
+
+                    <p>
+                        This customer has not started a conversation yet.
+                    </p>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

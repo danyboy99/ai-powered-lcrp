@@ -25,10 +25,11 @@ const getMissedCall = async (req, res) => {
 const incomingCall = async (req, res) => {
   try {
     const id = req.params.user;
+     console.log("call routes hit !!")
     const foundUser = await userServices.getUserById(id);
 
     res.type("text/xml");
-    console.log("call routes hit !!")
+   
     if (!foundUser || !foundUser.phoneNumber) {
       return res.send(`
         <Response>

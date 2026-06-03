@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask AI | LCRP</title>
+
+    <link rel="stylesheet" href="/stylesheets/askai.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+</head>
+<body>
+
+<div class="chat-page">
+
+    <div class="chat-container">
+
+        <div class="chat-header">
+
+            <div>
+                <h1>AI Assistant</h1>
+
+                <p>
+                    Ask any question about our services and get instant assistance.
+                </p>
+            </div>
+
+            <div class="status-indicator">
+                <span></span>
+                Online
+            </div>
+
+        </div>
+
+        <!-- FLASH MESSAGE -->
+        <div class="flash-wrapper">
+            <%- include('../component/flashmessage') %>
+        </div>
+
+        <!-- CHAT AREA -->
+        <div
+            id="chatMessages"
+            class="chat-messages"
+        >
+
+            <div class="welcome-message">
+
+                <i class="fa-solid fa-robot"></i>
+
+                <h3>
+                    Welcome 👋
+                </h3>
+
+                <p>
+                    Ask anything about our services and I'll do my best to help.
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- INPUT -->
+        <div class="chat-input-section">
+
+            <form
+                id="chatForm"
+                class="chat-form"
+            >
+
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Type your message..."
+                    autocomplete="off"
+                    required
+                >
+
+                <button type="submit">
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const userId =
+    "<%= userId %>";
+
+const phoneNumber =
+    "<%= phoneNumber %>";
+
+const chatMessages =
+    document.getElementById("chatMessages");
+
+const chatForm =
+    document.getElementById("chatForm");
+
+const messageInput =
+    document.getElementById("messageInput");
+
+/* LOAD CHAT */
+
+async function loadChats(){
+
+    try{
+
+        const response =
+            await fetch(
+                `/ai/getchat/${userId}/${phoneNumber}`
+            );
+
+        const result =
+            await response.json();
+
+        const chats =
+            result.data || [];
+
+        chatMessages.innerHTML = "";
+
+        if(chats.length === 0){
+
+            chatMessages.innerHTML = `
+                <div class="welcome-message">
+
+                    <i class="fa-solid fa-robot"></i>
+
+                    <h3>
+                        Welcome 👋
+                    </h3>
+
+                    <p>
+                        Ask anything about our services and I'll do my best to help.
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+        chats.forEach(chat=>{
+
+            const roleClass =
+                chat.role === "assistant"
+                ? "assistant"
+                : "user";
+
+            chatMessages.innerHTML += `
+            
+                <div class="message ${roleClass}">
+
+                    <div class="message-content">
+
+                        ${chat.content}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    }catch(err){
+
+        console.log(err);
+
+    }
+
+}
+/* SEND MESSAGE */
+
+chatForm.addEventListener(
+
+    "submit",
+
+    async(e)=>{
+
+        e.preventDefault();
+
+        const prompt =
+            messageInput.value.trim();
+
+        if(!prompt){
+            return;
+        }
+
+        const submitBtn =
+            chatForm.querySelector("button");
+
+        chatMessages.innerHTML += `
+
+            <div class="message user">
+
+                <div class="message-content">
+
+                    ${prompt}
+
+                </div>
+
+            </div>
+
+        `;
+
+        const typingId =
+            "typing-indicator";
+
+        chatMessages.innerHTML += `
+
+            <div
+                class="message assistant"
+                id="${typingId}"
+            >
+
+                <div class="message-content typing">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+            </div>
+
+        `;
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+        submitBtn.disabled = true;
+
+        submitBtn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+        messageInput.value = "";
+
+        try{
+
+            await fetch(
+
+                "/ai/ask",
+
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        prompt,
+                        phoneNumber,
+                        userId
+
+                    })
+
+                }
+
+            );
+
+            document
+                .getElementById(
+                    typingId
+                )
+                ?.remove();
+
+            submitBtn.disabled = false;
+
+            submitBtn.innerHTML =
+                '<i class="fa-solid fa-paper-plane"></i>';
+
+            loadChats();
+
+        }catch(err){
+
+            console.log(err);
+
+            submitBtn.disabled = false;
+
+            submitBtn.innerHTML =
+                '<i class="fa-solid fa-paper-plane"></i>';
+
+        }
+
+    }
+
+);
+loadChats();
+
+setInterval(
+    loadChats,
+    5000
+);
+
+</script>
+
+</body>
+</html>

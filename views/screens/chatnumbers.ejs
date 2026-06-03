@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Conversations | LCRP</title>
+
+    <link rel="stylesheet" href="/stylesheets/customer-chat-list.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>LCRP</h1>
+        </div>
+
+        <nav>
+
+            <a href="/user/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/user/lead-management">
+                Leads
+            </a>
+
+            <a href="/user/faq-management">
+                FAQ Management
+            </a>
+
+            <a href="/ai/chats" class="active">
+                AI Chat
+            </a>
+
+              <a href="/user/settings">
+                Settings
+            </a> 
+
+
+            <a href="/user/logout">
+                Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+
+        <header class="page-header">
+
+            <span class="badge">
+                AI Conversation Center
+            </span>
+
+            <h1>
+                Customer Conversations
+            </h1>
+
+            <p>
+                Monitor all customer interactions handled by your AI assistant.
+                Open any conversation to view the complete chat history.
+            </p>
+
+        </header>
+
+        <main class="chat-grid">
+
+            <% if(hasChatNumber){ %>
+
+                <% foundChats.forEach(number => { %>
+
+                    <a
+                        href="/ai/cutomer-chat/<%= number %>"
+                        class="chat-card"
+                    >
+
+                        <div class="chat-icon">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+
+                        <div class="chat-info">
+
+                            <h3>
+                                <%= number %>
+                            </h3>
+
+                            <p>
+                                Customer Conversation
+                            </p>
+
+                        </div>
+
+                        <div class="chat-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+
+                    </a>
+
+                <% }) %>
+
+            <% } else { %>
+
+                <div class="empty-state">
+
+                    <i class="fa-solid fa-comment-slash"></i>
+
+                    <h2>
+                        No Conversations Found
+                    </h2>
+
+                    <p>
+                        Customer chats will appear here once users start interacting with the AI assistant.
+                    </p>
+
+                </div>
+
+            <% } %>
+
+        </main>
+
+    </div>
+
+</div>
+
+</body>
+</html>
